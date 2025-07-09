@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Recreativa Parroquia Las Mercedes de Grecia 2025</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-slate-100 to-slate-200 min-h-screen flex flex-col items-center justify-center px-4 py-8">
+  <div class="w-full max-w-2xl bg-white p-8 rounded-3xl shadow-2xl border border-slate-200 animate-fade-in">
+    <h1 class="flex justify-center items-center space-x-3 text-3xl sm:text-4xl font-bold text-slate-800 mb-2">
+      🚴‍♂️<span>Recreativa Parroquia Las Mercedes de Grecia 2025</span>
+    </h1>
+    <p class="text-center text-lg font-medium text-gray-700 mb-1">📅 Domingo 28 de septiembre del 2025</p>
+    <p class="text-center text-sm font-semibold text-red-600 mb-6 uppercase">⚠️ Las inscripciones se cierran el sábado 27 de septiembre a las 9:00pm</p>
+
+    <form id="formulario" class="space-y-4">
+      <div><label class="block font-semibold text-gray-700">Nombre</label><input name="nombre" required class="input-style" /></div>
+      <div><label class="block font-semibold text-gray-700">Apellidos</label><input name="apellidos" required class="input-style" /></div>
+      <div><label class="block font-semibold text-gray-700">Número de cédula</label><input name="cedula" id="cedula" required class="input-style" maxlength="11" placeholder="0-0000-0000" /></div>
+      <div><label class="block font-semibold text-gray-700">Sexo</label>
+        <select name="sexo" required class="input-style">
+          <option value="">Selecciona</option><option>Masculino</option><option>Femenino</option><option>Otro</option>
+        </select>
+      </div>
+      <div>
+        <label class="block font-semibold text-gray-700">
+          Talla de camiseta
+          <span class="text-sm font-normal text-gray-500">(Solo hay 300 camisetas disponibles)</span>
+        </label>
+        <select name="talla" required class="input-style">
+          <option value="">Selecciona talla</option><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option>
+        </select>
+      </div>
+      <div><label class="block font-semibold text-gray-700">Teléfono</label><input name="telefono" required class="input-style" /></div>
+      <div><label class="block font-semibold text-gray-700">Contacto de emergencia</label><input name="emergencia" required class="input-style" placeholder="Nombre y teléfono" /></div>
+
+      <button type="submit" class="w-full bg-slate-800 text-white py-3 rounded-xl hover:bg-slate-900 transition duration-200 font-bold text-lg shadow-md transform hover:scale-105">
+        Enviar inscripción
+      </button>
+    </form>
+
+    <p id="mensaje" class="mt-4 text-green-600 font-medium text-center opacity-0 transition-opacity duration-700">✅ ¡Inscripción enviada con éxito!</p>
+
+    <div class="mt-10 p-6 bg-yellow-50 border border-yellow-300 rounded-xl shadow-sm">
+      <h2 class="text-xl font-semibold mb-2 text-yellow-700">💳 Información de pago</h2>
+      <p class="mb-1"><strong>Valor de la inscripción:</strong> ₡13,000 colones</p>
+      <p class="mb-1"><strong>Número de SINPE:</strong> 60427828</p>
+      <p class="mb-1"><strong>Titular:</strong> Cristhian Bogantes Rojas</p>
+      <p class="mt-4 text-lg font-bold text-red-700 uppercase">
+        * Enviar comprobante al WhatsApp: 60427828
+      </p>
+    </div>
+
+    <div class="mt-8 text-center">
+      <a href="https://www.facebook.com/p/Recreativa-MTB-Las-Mercedes-de-Grecia-100083199797371/" target="_blank" class="inline-flex items-center text-blue-600 hover:text-blue-800 transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-1" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 10-11.5 9.87v-6.99h-2v-2.88h2V9.41c0-2 1.2-3.11 3-3.11.87 0 1.78.16 1.78.16v1.96h-1c-1 0-1.32.63-1.32 1.28v1.54h2.24l-.36 2.88h-1.88v6.99A10 10 0 0022 12z"/></svg>
+        Visítanos en Facebook
+      </a>
+    </div>
+  </div>
+
+  <!-- MODAL DE CONFIRMACIÓN -->
+  <div id="modalConfirm" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+    <div class="bg-white p-6 rounded-2xl shadow-xl max-w-md w-full">
+      <h3 class="text-xl font-semibold text-gray-800 mb-3">¿Confirmar inscripción?</h3>
+      <p class="text-sm text-gray-600 mb-4">Revisá tus datos antes de continuar:</p>
+      <ul id="resumenDatos" class="text-sm text-gray-700 space-y-1 mb-6"></ul>
+      <div class="flex justify-end gap-3">
+        <button id="cancelarModal" class="px-4 py-2 rounded-lg border border-gray-400 text-gray-700 hover:bg-gray-100">Cancelar</button>
+        <button id="confirmarModal" class="px-4 py-2 rounded-lg bg-slate-800 text-white hover:bg-slate-900 font-semibold">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="confetti-wrapper" class="fixed inset-0 pointer-events-none overflow-hidden z-50"></div>
+
+  <style>
+    .animate-fade-in { animation: fadeIn 0.8s ease-out; }
+    @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
+    .input-style {
+      width:100%; padding:0.75rem; border:1px solid #CBD5E1;
+      border-radius:0.75rem; outline:none;
+      transition: all 0.3s ease;
+    }
+    .input-style:focus {
+      border-color:#64748b; box-shadow:0 0 0 3px rgba(100,116,139,0.3);
+    }
+    #confetti-wrapper {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      overflow: visible;
+      z-index: 9999;
+    }
+    .confetti {
+      position: absolute;
+      width: 8px;
+      height: 12px;
+      background-color: red;
+      opacity: 0.8;
+      border-radius: 2px;
+      animation-name: confetti-fall;
+      animation-timing-function: ease-out;
+      animation-fill-mode: forwards;
+    }
+    @keyframes confetti-fall {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+  </style>
+
+  <script type="module">
+    const form = document.getElementById('formulario');
+    const mensaje = document.getElementById('mensaje');
+    const modal = document.getElementById('modalConfirm');
+    const btnConfirmar = document.getElementById('confirmarModal');
+    const btnCancelar = document.getElementById('cancelarModal');
+    const resumen = document.getElementById('resumenDatos');
+    const confettiWrapper = document.getElementById('confetti-wrapper');
+    const cedulaInput = document.getElementById('cedula');
+
+    const SUPABASE_URL = "https://eezlcugfzentosdtgvee.supabase.co";
+    const SUPABASE_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVlemxjdWdmemVudG9zZHRndmVlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE5MzczMjMsImV4cCI6MjA2NzUxMzMyM30.j4mmBxec_44Um9lgGAlCvYrVzRw2DYtj-QxLxQqX18I";
+
+    let datos = {};
+
+    cedulaInput.addEventListener('input', (e) => {
+      let valor = e.target.value.replace(/\D/g, '').slice(0, 9);
+      let formateado = '';
+      if (valor.length > 0) formateado += valor[0] + '-';
+      if (valor.length > 1) formateado += valor.slice(1, 5);
+      if (valor.length >= 5) formateado += '-' + valor.slice(5, 9);
+      e.target.value = formateado;
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      datos = Object.fromEntries(new FormData(form));
+      resumen.innerHTML = '';
+      for (let [clave, valor] of Object.entries(datos)) {
+        const item = document.createElement('li');
+        item.textContent = `${clave.charAt(0).toUpperCase() + clave.slice(1)}: ${valor}`;
+        resumen.appendChild(item);
+      }
+      modal.classList.remove('hidden');
+    });
+
+    btnCancelar.addEventListener('click', () => {
+      modal.classList.add('hidden');
+    });
+
+    function crearConfetti() {
+      const colores = ['#ef4444', '#f97316', '#facc15', '#22c55e', '#3b82f6', '#a855f7'];
+      for(let i = 0; i < 80; i++) {
+        const c = document.createElement('div');
+        c.classList.add('confetti');
+        c.style.left = `${Math.random() * 100}vw`;
+        c.style.top = `-${Math.random() * 20}vh`;
+        c.style.backgroundColor = colores[Math.floor(Math.random() * colores.length)];
+        c.style.animationDuration = `${Math.random() * 3 + 2}s`;
+        c.style.opacity = (Math.random() * 0.7 + 0.3).toFixed(2);
+        c.style.transform = `rotate(${Math.random() * 360}deg)`;
+        confettiWrapper.appendChild(c);
+        c.addEventListener('animationend', () => c.remove());
+      }
+    }
+
+    btnConfirmar.addEventListener('click', async () => {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/inscripciones`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_API_KEY,
+          'Authorization': `Bearer ${SUPABASE_API_KEY}`,
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify(datos)
+      });
+
+      if (res.ok) {
+        mensaje.style.opacity = '1';
+        form.reset();
+        modal.classList.add('hidden');
+        crearConfetti();
+        setTimeout(() => mensaje.style.opacity = '0', 5000);
+      } else {
+        alert("❌ Ocurrió un error al enviar. Intenta nuevamente.");
+        modal.classList.add('hidden');
+      }
+    });
+  </script>
+</body>
+</html>
+
